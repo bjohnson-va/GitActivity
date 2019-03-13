@@ -1,0 +1,85 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+    <h1>GitHub Reviewer Profile for {{userDisplayName}}</h1>
+    <ng-container *ngIf="repos.isLoading$ | async">
+        <mat-spinner></mat-spinner>
+    </ng-container>
+    <ng-container *ngIf="repos.isSuccess$ | async">
+        <div *ngFor="let repo of repos.workResults$ | async">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>
+                        Name: {{repo.name}} <small>({{startDate.toDateString()}} - Now)</small>
+                    </mat-card-title>
+                    <div class="no-part"
+                         *ngIf="(participation.getWorkResults$(repo.name) | async) === 0">
+                        No Participation
+                    </div>
+                </mat-card-header>
+                <mat-card-content *ngIf="(participation.getWorkResults$(repo.name) | async) !== 0">
+                    <ng-container *ngIf="prs.isLoading$(repo.name) | async">
+                        <mat-spinner></mat-spinner>
+                    </ng-container>
+                    <mat-list *ngIf="prs.isSuccess$(repo.name) | async">
+                        <h1>You</h1>
+                        <div class="stats-row">
+                            <app-stat title="Participation" [warnPercent]="10"
+                                      [value]="participation.getWorkResults$(repo.name) | async"
+                                      [matTooltip]="'You have left a comment or review on ' +
+                                      (participation.getWorkResults$(repo.name) | async) +
+                                      '% of the recent PRs in this repo.'"
+                            >
+                            </app-stat>
+                            <app-stat title="Feedback" [warnPercent]="50"
+                                      [value]="approvedWithComment.getWorkResults$(repo.name) | async"
+                                      [matTooltip]="(approvedWithComment.getWorkResults$(repo.name) | async) +
+                                      '% of your recent reviews included feedback.'"
+                            >
+                            </app-stat>
+                        </div>
+<!--                        <div class="stats-row">-->
+<!--                            <async-ui [data]="prevParticipation.getWorkResults$(repo.name) | async"-->
+<!--                                      [loading]="prevParticipation.isLoading$(repo.name) | async">-->
+<!--                                <ng-container *successData="let data">-->
+<!--                                    <div class="good" *ngIf="data >= 0">-->
+<!--                                        Up {{data}}% from previous period-->
+<!--                                    </div>-->
+<!--                                    <div class="bad" *ngIf="data < 0">-->
+<!--                                        Down {{data}}% from previous period-->
+<!--                                    </div>-->
+<!--                                </ng-container>-->
+<!--                                <ng-container loading>-->
+<!--                                    <bj-helix-loader></bj-helix-loader>-->
+<!--                                </ng-container>-->
+<!--                            </async-ui>-->
+<!--                        </div>-->
+                        <h1>Team</h1>
+                        <div class="stats-row">
+                            <app-stat title="Participation"
+                                      [value]="teamParticipation.getWorkResults$(repo.name) | async"
+                                      [matTooltip]="'Your teammates have left comments or review on ' +
+                                      (teamParticipation.getWorkResults$(repo.name) | async) +
+                                      '% of the recent PRs in this repo (average per developer).'"
+                            >
+                            </app-stat>
+                            <app-stat title="Feedback" [warnPercent]="50"
+                                      [value]="teamApprovedWithComments.getWorkResults$(repo.name) | async"
+                                      [matTooltip]="(teamApprovedWithComments.getWorkResults$(repo.name) | async) +
+                                      '% of your teammates\' recent reviews included feedback comments.'"
+                            >
+                            </app-stat>
+                        </div>
+                    </mat-list>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </ng-container>
+    <!--  <div *ngFor="let pr of (pullRequests | async)">-->
+    <!--    <div>PR: {{pr.name}}</div>-->
+    <!--    <div>Number of Comments left: {{pr.numComments}}</div>-->
+    <!--    &lt;!&ndash;TODO: Above average number?&ndash;&gt;-->
+    <!--    &lt;!&ndash;TODO: Sentiment analysis &ndash;&gt;-->
+    <!--    &lt;!&ndash;TODO: Readability score? &ndash;&gt;-->
+    <!--  </div>-->
+</div>
+

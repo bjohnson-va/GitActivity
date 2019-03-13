@@ -1,0 +1,13 @@
+mat-card {
+  max-width: 800px;
+  margin: 16px auto;
+  h1 {
+    text-align: start;
+  }
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+

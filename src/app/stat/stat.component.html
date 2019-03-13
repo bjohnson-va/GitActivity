@@ -1,0 +1,8 @@
+<h1>{{title}}</h1>
+<div class="container">
+  <mat-progress-spinner [value]="value" [mode]="mode"></mat-progress-spinner>
+  <div class="warning" *ngIf="value < warnPercent"></div>
+  <div class="text">
+    {{value}}%
+  </div>
+</div>
